@@ -2,7 +2,7 @@
 
 高级 X.com 搜索查询构建器和管理器。此 Chrome 扩展程序通过强大的搜索模板和自定义查询构建器，帮助您在 X.com 上发现高质量内容。
 
-![预览图](/Users/jarodise/Documents/GitHub/XQuery/public/preview.png)
+![预览图](public/preview.png)
 
 ## 📥 快速安装 (推荐)
 
@@ -46,7 +46,7 @@ MIT
 
 Advanced X.com search query builder and manager. This Chrome extension helps you find high-quality content on X.com using powerful search templates and a custom query builder.
 
-![Extension Preview](/Users/jarodise/Documents/GitHub/XQuery/public/preview.png)
+![Extension Preview](public/preview.png)
 
 ## 📥 Quick Start (Recommended)
 
