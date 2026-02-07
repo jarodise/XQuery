@@ -1,0 +1,58 @@
+{
+  "manifest_version": 3,
+  "name": "X Query Search",
+  "version": "1.0.0",
+  "description": "Advanced X.com search with templates and query builder",
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://twitter.com/*",
+    "https://x.com/*"
+  ],
+  "action": {
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "X Query Search"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "service-worker-loader.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "assets/index.tsx-rukiljcR.js"
+      ],
+      "matches": [
+        "https://twitter.com/*",
+        "https://x.com/*"
+      ],
+      "css": [
+        "assets/index-NyI9eug8.css"
+      ]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "matches": [
+        "https://twitter.com/*",
+        "https://x.com/*"
+      ],
+      "resources": [
+        "src/content/*",
+        "assets/index.tsx-rukiljcR.js"
+      ],
+      "use_dynamic_url": false
+    }
+  ]
+}
