@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #16181c;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2f3336;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3f4346;
+}
+
+/* Font import */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+/* Base styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'JetBrains Mono', 'SF Pro Text', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Button base styles */
+.btn-primary {
+  @apply bg-x-blue hover:bg-x-blue-dark text-white font-medium py-2 px-4 rounded-full transition-colors duration-200;
+}
+
+.btn-secondary {
+  @apply bg-transparent border border-x-border hover:border-x-blue hover:text-x-blue text-x-text font-medium py-2 px-4 rounded-full transition-colors duration-200;
+}
+
+/* Card hover effect */
+.card-hover {
+  @apply transition-all duration-200 hover:bg-x-dark-surface hover:border-x-blue cursor-pointer;
+}
+
+/* Tab indicator animation */
+.tab-indicator {
+  @apply absolute bottom-0 h-0.5 bg-x-blue transition-all duration-300;
+}
+
+/* Input styles */
+.input-dark {
+  @apply bg-x-dark-elevated border border-x-border rounded-lg px-3 py-2 text-x-text placeholder-x-text-secondary focus:outline-none focus:border-x-blue transition-colors;
+}
+
+/* Select styles */
+.select-dark {
+  @apply bg-x-dark-elevated border border-x-border rounded-lg px-3 py-2 text-x-text focus:outline-none focus:border-x-blue appearance-none cursor-pointer;
+}
