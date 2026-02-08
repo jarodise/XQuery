@@ -1,25 +1,41 @@
+import { useState } from 'react'
 import { useStore } from '@/stores/useStore'
 import { buildQueryString } from '@/utils/queryBuilder'
 import { executeSearch } from '@/utils/xSearch'
+import { sanitizeName, isValidQueryString } from '@/utils/sanitize'
+import InputDialog from './ui/InputDialog'
+import Toast from './ui/Toast'
 
 export default function QueryPreview() {
-    const { queryParams, addFavorite } = useStore()
+    const { queryParams, addFavorite, addSearchHistory } = useStore()
     const query = buildQueryString(queryParams)
+    const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [toastMessage, setToastMessage] = useState<string | null>(null)
 
     const handleSearch = () => {
+        addSearchHistory(query, queryParams)
         executeSearch(query)
     }
 
     const handleSave = () => {
-        const name = window.prompt('Enter a name for this search:', 'My Search')
-        if (name) {
-            addFavorite(name.trim(), query)
+        if (!isValidQueryString(query)) {
+            return
+        }
+        setIsDialogOpen(true)
+    }
+
+    const handleDialogClose = (value: string | null) => {
+        setIsDialogOpen(false)
+        const sanitizedName = sanitizeName(value)
+        if (sanitizedName) {
+            addFavorite(sanitizedName, query)
         }
     }
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(query)
-        // We could add a toast here if we had one
+        setToastMessage('Copied to clipboard!')
+        setTimeout(() => setToastMessage(null), 2000)
     }
 
     return (
@@ -123,6 +139,15 @@ export default function QueryPreview() {
                     Search
                 </button>
             </div>
+            <InputDialog
+                isOpen={isDialogOpen}
+                onClose={handleDialogClose}
+                title="Save to Favorites"
+                defaultValue="My Search"
+                placeholder="Enter a name for this search"
+                maxLength={100}
+            />
+            {toastMessage && <Toast message={toastMessage} type="success" duration={2000} />}
         </div>
     )
 }

@@ -1,3 +1,6 @@
+/* Font import */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -19,9 +22,6 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #3f4346;
 }
-
-/* Font import */
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 /* Base styles */
 * {

@@ -35,7 +35,14 @@ export interface FavoriteQuery {
   updatedAt: number
 }
 
-export type TabType = 'templates' | 'custom' | 'favorites'
+export interface SearchHistoryEntry {
+  id: string
+  query: string
+  params?: QueryParams
+  timestamp: number
+}
+
+export type TabType = 'templates' | 'custom' | 'favorites' | 'history'
 
 // Message types for extension communication
 export type MessageType = 'TOGGLE_SIDEBAR' | 'SIDEBAR_STATE' | 'EXECUTE_SEARCH'

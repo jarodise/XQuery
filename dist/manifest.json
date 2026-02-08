@@ -31,14 +31,14 @@
   "content_scripts": [
     {
       "js": [
-        "assets/index.tsx-rukiljcR.js"
+        "assets/index.tsx-C6w0A1Mo.js"
       ],
       "matches": [
         "https://twitter.com/*",
         "https://x.com/*"
       ],
       "css": [
-        "assets/index-NyI9eug8.css"
+        "assets/index-B7-RL1rf.css"
       ]
     }
   ],
@@ -50,7 +50,7 @@
       ],
       "resources": [
         "src/content/*",
-        "assets/index.tsx-rukiljcR.js"
+        "assets/index.tsx-C6w0A1Mo.js"
       ],
       "use_dynamic_url": false
     }

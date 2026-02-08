@@ -1,4 +1,7 @@
+import { useState } from 'react'
 import { useStore } from '@/stores/useStore'
+import { sanitizeName } from '@/utils/sanitize'
+import InputDialog from './ui/InputDialog'
 import type { SearchTemplate } from '@/types'
 
 interface TemplateCardProps {
@@ -8,12 +11,18 @@ interface TemplateCardProps {
 
 export default function TemplateCard({ template, onClick }: TemplateCardProps) {
   const { addFavorite } = useStore()
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   const handleSave = (e: React.MouseEvent) => {
     e.stopPropagation()
-    const name = window.prompt('Enter a name for this search:', template.name)
-    if (name) {
-      addFavorite(name.trim(), template.query)
+    setIsDialogOpen(true)
+  }
+
+  const handleDialogClose = (value: string | null) => {
+    setIsDialogOpen(false)
+    const sanitizedName = sanitizeName(value)
+    if (sanitizedName) {
+      addFavorite(sanitizedName, template.query)
     }
   }
 
@@ -127,6 +136,14 @@ export default function TemplateCard({ template, onClick }: TemplateCardProps) {
       >
         {template.query}
       </code>
+      <InputDialog
+        isOpen={isDialogOpen}
+        onClose={handleDialogClose}
+        title="Save to Favorites"
+        defaultValue={template.name}
+        placeholder="Enter a name for this search"
+        maxLength={100}
+      />
     </div>
   )
 }

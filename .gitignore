@@ -3,3 +3,5 @@ node_modules
 certs/
 *.pem
 *.crx
+CLAUDE.md
+.claude

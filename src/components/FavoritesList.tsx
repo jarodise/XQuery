@@ -1,8 +1,18 @@
+import { useState } from 'react'
 import { useStore } from '@/stores/useStore'
 import { executeSearch } from '@/utils/xSearch'
+import ConfirmDialog from './ui/ConfirmDialog'
 
 export default function FavoritesList() {
     const { favorites, removeFavorite } = useStore()
+    const [deleteId, setDeleteId] = useState<string | null>(null)
+
+    const handleDeleteConfirm = (confirmed: boolean) => {
+        if (confirmed && deleteId) {
+            removeFavorite(deleteId)
+        }
+        setDeleteId(null)
+    }
 
     if (favorites.length === 0) {
         return (
@@ -81,9 +91,7 @@ export default function FavoritesList() {
                             aria-label="Delete"
                             onClick={(e) => {
                                 e.stopPropagation()
-                                if (window.confirm('Delete this favorite?')) {
-                                    removeFavorite(fav.id)
-                                }
+                                setDeleteId(fav.id)
                             }}
                             style={{
                                 background: 'none',
@@ -127,6 +135,15 @@ export default function FavoritesList() {
                     </code>
                 </div>
             ))}
+            <ConfirmDialog
+                isOpen={deleteId !== null}
+                onClose={handleDeleteConfirm}
+                title="Delete Favorite"
+                message="Are you sure you want to delete this favorite? This action cannot be undone."
+                confirmText="Delete"
+                cancelText="Cancel"
+                isDestructive={true}
+            />
         </div>
     )
 }
