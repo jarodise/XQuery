@@ -6,18 +6,20 @@ import TemplateList from '@/components/TemplateList'
 import QueryBuilder from '@/components/QueryBuilder'
 import QueryPreview from '@/components/QueryPreview'
 import FavoritesList from '@/components/FavoritesList'
+import HistoryList from '@/components/HistoryList'
 
 interface SidebarProps {
   onClose: () => void
 }
 
 export default function Sidebar({ onClose }: SidebarProps) {
-  const { activeTab, loadFavorites } = useStore()
+  const { activeTab, loadFavorites, loadSearchHistory } = useStore()
   const [isClosing, setIsClosing] = useState(false)
 
   useEffect(() => {
     loadFavorites()
-  }, [loadFavorites])
+    loadSearchHistory()
+  }, [loadFavorites, loadSearchHistory])
 
   const handleClose = () => {
     setIsClosing(true)
@@ -66,6 +68,7 @@ export default function Sidebar({ onClose }: SidebarProps) {
         {activeTab === 'templates' && <TemplateList />}
         {activeTab === 'custom' && <QueryBuilder />}
         {activeTab === 'favorites' && <FavoritesList />}
+        {activeTab === 'history' && <HistoryList />}
       </div>
 
       {activeTab === 'custom' && <QueryPreview />}

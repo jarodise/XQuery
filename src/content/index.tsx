@@ -9,6 +9,7 @@ const SIDEBAR_ROOT_ID = 'x-query-search-root'
 let isOpen = false
 let shadowRoot: ShadowRoot | null = null
 let rootContainer: HTMLDivElement | null = null
+let removeTimeout: ReturnType<typeof setTimeout> | null = null
 
 // Create and inject the sidebar
 function createSidebar() {
@@ -85,9 +86,23 @@ function getSidebarStyles(): string {
 }
 
 function openSidebar() {
-  if (!document.getElementById(SIDEBAR_ID)) {
-    createSidebar()
+  // Clear any pending removal timeout
+  if (removeTimeout !== null) {
+    clearTimeout(removeTimeout)
+    removeTimeout = null
   }
+
+  const existingSidebar = document.getElementById(SIDEBAR_ID)
+  if (existingSidebar) {
+    // Sidebar exists but might be closing - just reopen it
+    isOpen = true
+    requestAnimationFrame(() => {
+      existingSidebar.style.transform = 'translateX(0)'
+    })
+    return
+  }
+
+  createSidebar()
   isOpen = true
 
   // Trigger animation
@@ -104,8 +119,13 @@ function closeSidebar() {
   const sidebar = document.getElementById(SIDEBAR_ID)
   if (sidebar) {
     sidebar.style.transform = 'translateX(100%)'
-    setTimeout(() => {
+    // Clear any existing timeout before creating a new one
+    if (removeTimeout !== null) {
+      clearTimeout(removeTimeout)
+    }
+    removeTimeout = setTimeout(() => {
       sidebar.remove()
+      removeTimeout = null
     }, 300)
   }
 }

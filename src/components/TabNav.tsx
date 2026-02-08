@@ -1,10 +1,11 @@
 import { useStore } from '@/stores/useStore'
 import type { TabType } from '@/types'
 
-const tabs: { id: TabType; label: string }[] = [
+const tabs: { id: TabType; label: string; icon?: string }[] = [
   { id: 'templates', label: '模板' },
   { id: 'custom', label: '自定义' },
   { id: 'favorites', label: '收藏' },
+  { id: 'history', label: '历史', icon: '⟲' },
 ]
 
 export default function TabNav() {
@@ -35,7 +36,14 @@ export default function TabNav() {
             transition: 'color 0.2s ease',
           }}
         >
-          {tab.label}
+          {tab.icon ? (
+            <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
+              <span style={{ fontSize: '12px' }}>{tab.icon}</span>
+              {tab.label}
+            </span>
+          ) : (
+            tab.label
+          )}
           {activeTab === tab.id && (
             <div
               style={{

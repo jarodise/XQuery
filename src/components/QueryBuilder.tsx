@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useStore } from '@/stores/useStore'
+import { sanitizeKeyword } from '@/utils/sanitize'
 import type { Language, TimeRange, MediaType, ExcludeType } from '@/types'
 
 export default function QueryBuilder() {
@@ -10,10 +11,17 @@ export default function QueryBuilder() {
     const handleAddKeyword = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' && keywordInput.trim()) {
             e.preventDefault()
-            if (!queryParams.keywords.includes(keywordInput.trim())) {
-                setQueryParams({
-                    keywords: [...queryParams.keywords, keywordInput.trim()],
-                })
+            const sanitized = sanitizeKeyword(keywordInput.trim())
+            if (sanitized) {
+                // Check for duplicates (case-insensitive)
+                const exists = queryParams.keywords.some(
+                    (kw) => kw.toLowerCase() === sanitized.toLowerCase()
+                )
+                if (!exists) {
+                    setQueryParams({
+                        keywords: [...queryParams.keywords, sanitized],
+                    })
+                }
             }
             setKeywordInput('')
         }
