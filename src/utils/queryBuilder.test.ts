@@ -1,181 +1,164 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { buildQueryString } from './queryBuilder'
+import type { QueryParams } from '@/types'
+
+function createParams(overrides: Partial<QueryParams> = {}): QueryParams {
+  return {
+    keywords: [],
+    keywordMode: 'and',
+    anyKeywords: [],
+    excludeKeywords: [],
+    exactPhrase: '',
+    fromAccount: '',
+    toAccount: '',
+    mentionAccount: '',
+    sinceDate: '',
+    untilDate: '',
+    nearLocation: '',
+    withinDistance: '',
+    language: 'all',
+    timeRange: 'all',
+    minFaves: 0,
+    minRetweets: 0,
+    minReplies: 0,
+    mediaType: [],
+    include: [],
+    exclude: [],
+    questionOnly: false,
+    customOperators: [],
+    ...overrides,
+  }
+}
 
 describe('queryBuilder', () => {
   describe('buildQueryString', () => {
-    it('should build query with keywords only', () => {
-      const result = buildQueryString({
-        keywords: ['AI', 'ChatGPT'],
-        language: 'all',
-        timeRange: 'all',
-        minFaves: 0,
-        mediaType: [],
-        exclude: [],
-      })
-
-      expect(result).toBe('AI OR ChatGPT')
+    it('builds basic keywords with AND mode', () => {
+      const result = buildQueryString(createParams({ keywords: ['AI', 'ChatGPT'] }))
+      expect(result).toBe('AI ChatGPT')
     })
 
-    it('should build query with single keyword', () => {
-      const result = buildQueryString({
-        keywords: ['AI'],
-        language: 'all',
-        timeRange: 'all',
-        minFaves: 0,
-        mediaType: [],
-        exclude: [],
-      })
-
-      expect(result).toBe('AI')
+    it('builds keywords with OR mode', () => {
+      const result = buildQueryString(
+        createParams({ keywords: ['AI', 'ChatGPT'], keywordMode: 'or' })
+      )
+      expect(result).toBe('(AI OR ChatGPT)')
     })
 
-    it('should add language filter', () => {
-      const result = buildQueryString({
-        keywords: ['test'],
-        language: 'zh-cn',
-        timeRange: 'all',
-        minFaves: 0,
-        mediaType: [],
-        exclude: [],
-      })
-
-      expect(result).toContain('lang:zh-cn')
+    it('includes exact phrase and optional OR group', () => {
+      const result = buildQueryString(
+        createParams({
+          exactPhrase: 'machine learning',
+          anyKeywords: ['thread', 'tutorial'],
+        })
+      )
+      expect(result).toContain('"machine learning"')
+      expect(result).toContain('(thread OR tutorial)')
     })
 
-    it('should add time range filter', () => {
-      const result = buildQueryString({
-        keywords: ['test'],
-        language: 'all',
-        timeRange: '4h',
-        minFaves: 0,
-        mediaType: [],
-        exclude: [],
-      })
-
-      expect(result).toContain('within_time:4h')
-    })
-
-    it('should add min faves filter', () => {
-      const result = buildQueryString({
-        keywords: ['test'],
-        language: 'all',
-        timeRange: 'all',
-        minFaves: 500,
-        mediaType: [],
-        exclude: [],
-      })
-
+    it('adds engagement filters', () => {
+      const result = buildQueryString(
+        createParams({ minFaves: 500, minRetweets: 50, minReplies: 20 })
+      )
       expect(result).toContain('min_faves:500')
+      expect(result).toContain('min_retweets:50')
+      expect(result).toContain('min_replies:20')
     })
 
-    it('should add media type filter for images', () => {
-      const result = buildQueryString({
-        keywords: ['test'],
-        language: 'all',
-        timeRange: 'all',
-        minFaves: 0,
-        mediaType: ['images'],
-        exclude: [],
-      })
-
-      expect(result).toContain('filter:images')
+    it('adds account and date operators', () => {
+      const result = buildQueryString(
+        createParams({
+          fromAccount: '@OpenAI',
+          toAccount: 'sama',
+          mentionAccount: '@Apple',
+          sinceDate: '2024-01-01',
+          untilDate: '2024-12-31',
+        })
+      )
+      expect(result).toContain('from:OpenAI')
+      expect(result).toContain('to:sama')
+      expect(result).toContain('@Apple')
+      expect(result).toContain('since:2024-01-01')
+      expect(result).toContain('until:2024-12-31')
     })
 
-    it('should add media type filter for videos', () => {
-      const result = buildQueryString({
-        keywords: ['test'],
-        language: 'all',
-        timeRange: 'all',
-        minFaves: 0,
-        mediaType: ['videos'],
-        exclude: [],
-      })
-
-      expect(result).toContain('filter:native_video')
-    })
-
-    it('should add exclude retweets', () => {
-      const result = buildQueryString({
-        keywords: ['test'],
-        language: 'all',
-        timeRange: 'all',
-        minFaves: 0,
-        mediaType: [],
-        exclude: ['retweets'],
-      })
-
+    it('adds include and exclude operators', () => {
+      const result = buildQueryString(
+        createParams({
+          include: ['verified', 'replies'],
+          exclude: ['retweets', 'replies', 'links'],
+        })
+      )
+      expect(result).toContain('is:verified')
+      expect(result).toContain('is:reply')
       expect(result).toContain('-is:retweet')
-    })
-
-    it('should add exclude replies', () => {
-      const result = buildQueryString({
-        keywords: ['test'],
-        language: 'all',
-        timeRange: 'all',
-        minFaves: 0,
-        mediaType: [],
-        exclude: ['replies'],
-      })
-
-      expect(result).toContain('-filter:replies')
-    })
-
-    it('should add exclude links', () => {
-      const result = buildQueryString({
-        keywords: ['test'],
-        language: 'all',
-        timeRange: 'all',
-        minFaves: 0,
-        mediaType: [],
-        exclude: ['links'],
-      })
-
+      expect(result).toContain('-is:reply')
       expect(result).toContain('-filter:links')
     })
 
-    it('should build complex query with all options', () => {
-      const result = buildQueryString({
-        keywords: ['AI', 'ChatGPT'],
-        language: 'en',
-        timeRange: '12h',
-        minFaves: 1000,
-        mediaType: ['images'],
-        exclude: ['retweets', 'replies'],
-      })
-
-      expect(result).toContain('AI OR ChatGPT')
-      expect(result).toContain('lang:en')
-      expect(result).toContain('within_time:12h')
-      expect(result).toContain('min_faves:1000')
+    it('adds media filters', () => {
+      const result = buildQueryString(createParams({ mediaType: ['images', 'videos', 'links'] }))
       expect(result).toContain('filter:images')
+      expect(result).toContain('filter:videos')
+      expect(result).toContain('filter:links')
+    })
+
+    it('adds geo filters and question-only', () => {
+      const result = buildQueryString(
+        createParams({
+          nearLocation: 'Tokyo',
+          withinDistance: '10km',
+          questionOnly: true,
+        })
+      )
+      expect(result).toContain('near:Tokyo')
+      expect(result).toContain('within:10km')
+      expect(result).toContain('?')
+    })
+
+    it('appends custom operators', () => {
+      const result = buildQueryString(
+        createParams({
+          keywords: ['AI'],
+          customOperators: ['url:github', 'filter:follows', 'source:"Twitter Web App"'],
+        })
+      )
+      expect(result).toContain('AI')
+      expect(result).toContain('url:github')
+      expect(result).toContain('filter:follows')
+      expect(result).toContain('source:"Twitter Web App"')
+    })
+
+    it('builds a complete complex query', () => {
+      const result = buildQueryString(
+        createParams({
+          keywords: ['prompt'],
+          keywordMode: 'and',
+          anyKeywords: ['ChatGPT', 'Claude'],
+          excludeKeywords: ['giveaway'],
+          language: 'en',
+          timeRange: '24h',
+          minFaves: 100,
+          minRetweets: 20,
+          minReplies: 10,
+          mediaType: ['images'],
+          include: ['verified'],
+          exclude: ['retweets'],
+          customOperators: ['url:github'],
+        })
+      )
+
+      expect(result).toContain('prompt')
+      expect(result).toContain('(ChatGPT OR Claude)')
+      expect(result).toContain('-giveaway')
+      expect(result).toContain('lang:en')
+      expect(result).toContain('within_time:24h')
+      expect(result).toContain('min_faves:100')
+      expect(result).toContain('min_retweets:20')
+      expect(result).toContain('min_replies:10')
+      expect(result).toContain('filter:images')
+      expect(result).toContain('is:verified')
       expect(result).toContain('-is:retweet')
-      expect(result).toContain('-filter:replies')
-    })
-
-    it('should handle empty keywords', () => {
-      const result = buildQueryString({
-        keywords: [],
-        language: 'en',
-        timeRange: 'all',
-        minFaves: 100,
-        mediaType: [],
-        exclude: [],
-      })
-
-      expect(result).toBe('lang:en min_faves:100')
-    })
-
-    it('should handle no filters', () => {
-      const result = buildQueryString({
-        keywords: ['test'],
-        language: 'all',
-        timeRange: 'all',
-        minFaves: 0,
-        mediaType: [],
-        exclude: [],
-      })
-
-      expect(result).toBe('test')
+      expect(result).toContain('url:github')
     })
   })
 })

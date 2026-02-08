@@ -1,5 +1,6 @@
 import { useStore } from '@/stores/useStore'
 import type { SearchTemplate } from '@/types'
+import { categoryLabels } from '@/data/templates'
 
 interface TemplateCardProps {
   template: SearchTemplate
@@ -110,6 +111,38 @@ export default function TemplateCard({ template, onClick }: TemplateCardProps) {
       >
         {template.description}
       </p>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', flexWrap: 'wrap' }}>
+        {template.category && (
+          <span
+            style={{
+              fontSize: '10px',
+              color: '#8ecdf8',
+              border: '1px solid rgba(29, 155, 240, 0.45)',
+              borderRadius: '999px',
+              padding: '2px 6px',
+              background: 'rgba(29, 155, 240, 0.12)',
+            }}
+          >
+            {categoryLabels[template.category]}
+          </span>
+        )}
+        {(template.tags ?? []).slice(0, 3).map((tag) => (
+          <span
+            key={`${template.id}-${tag}`}
+            style={{
+              fontSize: '10px',
+              color: '#9aa3ab',
+              border: '1px solid #2f3336',
+              borderRadius: '999px',
+              padding: '2px 6px',
+              background: '#101317',
+            }}
+          >
+            #{tag}
+          </span>
+        ))}
+      </div>
 
       <code
         style={{

@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import type { TabType, QueryParams, FavoriteQuery, Region } from '@/types'
+import { getExtensionApi } from '@/utils/extensionApi'
 
 interface AppState {
   // UI State
@@ -30,11 +31,27 @@ interface AppState {
 
 const defaultQueryParams: QueryParams = {
   keywords: [],
+  keywordMode: 'and',
+  anyKeywords: [],
+  excludeKeywords: [],
+  exactPhrase: '',
+  fromAccount: '',
+  toAccount: '',
+  mentionAccount: '',
+  sinceDate: '',
+  untilDate: '',
+  nearLocation: '',
+  withinDistance: '',
   language: 'all',
   timeRange: 'all',
   minFaves: 0,
+  minRetweets: 0,
+  minReplies: 0,
   mediaType: [],
+  include: [],
   exclude: [],
+  questionOnly: false,
+  customOperators: [],
 }
 
 export const useStore = create<AppState>((set) => ({
@@ -102,8 +119,10 @@ export const useStore = create<AppState>((set) => ({
 const FAVORITES_KEY = 'x-query-favorites'
 
 async function loadFavoritesFromStorage(): Promise<FavoriteQuery[]> {
-  if (typeof chrome !== 'undefined' && chrome.storage) {
-    const result = await chrome.storage.local.get(FAVORITES_KEY)
+  const extensionApi = getExtensionApi()
+
+  if (extensionApi?.storage) {
+    const result = await extensionApi.storage.local.get(FAVORITES_KEY)
     return result[FAVORITES_KEY] || []
   }
   // Fallback for testing
@@ -112,8 +131,10 @@ async function loadFavoritesFromStorage(): Promise<FavoriteQuery[]> {
 }
 
 function saveFavoritesToStorage(favorites: FavoriteQuery[]): void {
-  if (typeof chrome !== 'undefined' && chrome.storage) {
-    chrome.storage.local.set({ [FAVORITES_KEY]: favorites })
+  const extensionApi = getExtensionApi()
+
+  if (extensionApi?.storage) {
+    extensionApi.storage.local.set({ [FAVORITES_KEY]: favorites })
   } else {
     localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites))
   }

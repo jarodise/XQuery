@@ -25,13 +25,15 @@
     "128": "icons/icon128.png"
   },
   "background": {
-    "service_worker": "service-worker-loader.js",
+    "scripts": [
+      "service-worker-loader.js"
+    ],
     "type": "module"
   },
   "content_scripts": [
     {
       "js": [
-        "assets/index.tsx-loader-DimCqIwc.js"
+        "assets/index.tsx-loader-B9bVlQaY.js"
       ],
       "matches": [
         "https://twitter.com/*",
@@ -51,9 +53,14 @@
       "resources": [
         "src/content/*",
         "assets/extensionApi-C4IXQV95.js",
-        "assets/index.tsx-DMM_upXB.js"
-      ],
-      "use_dynamic_url": false
+        "assets/index.tsx-BtRxaokV.js"
+      ]
     }
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "x-query-search@local.dev",
+      "strict_min_version": "121.0"
+    }
+  }
 }

@@ -29,7 +29,7 @@ export default function Header({ onClose }: HeaderProps) {
             backgroundClip: 'text',
           }}
         >
-          Query Search
+          Query Super
         </h1>
       </div>
 

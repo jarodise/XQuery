@@ -2,75 +2,93 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import QueryBuilder from './QueryBuilder'
 import { useStore } from '@/stores/useStore'
+import type { QueryParams } from '@/types'
 
-// Mock the store
 vi.mock('@/stores/useStore', () => ({
-    useStore: vi.fn(),
+  useStore: vi.fn(),
 }))
 
+function createQueryParams(): QueryParams {
+  return {
+    keywords: [],
+    keywordMode: 'and',
+    anyKeywords: [],
+    excludeKeywords: [],
+    exactPhrase: '',
+    fromAccount: '',
+    toAccount: '',
+    mentionAccount: '',
+    sinceDate: '',
+    untilDate: '',
+    nearLocation: '',
+    withinDistance: '',
+    language: 'all',
+    timeRange: 'all',
+    minFaves: 0,
+    minRetweets: 0,
+    minReplies: 0,
+    mediaType: [],
+    include: [],
+    exclude: [],
+    questionOnly: false,
+    customOperators: [],
+  }
+}
+
 describe('QueryBuilder', () => {
-    const mockSetQueryParams = vi.fn()
-    const mockResetQueryParams = vi.fn()
-    const mockAddFavorite = vi.fn()
+  const mockSetQueryParams = vi.fn()
+  const mockResetQueryParams = vi.fn()
 
-    beforeEach(() => {
-        vi.clearAllMocks()
-            ; (useStore as any).mockReturnValue({
-                queryParams: {
-                    keywords: [],
-                    language: 'all',
-                    timeRange: 'all',
-                    minFaves: 0,
-                    mediaType: [],
-                    exclude: [],
-                },
-                setQueryParams: mockSetQueryParams,
-                resetQueryParams: mockResetQueryParams,
-                addFavorite: mockAddFavorite,
-            })
+  beforeEach(() => {
+    vi.clearAllMocks()
+    ;(useStore as any).mockReturnValue({
+      queryParams: createQueryParams(),
+      setQueryParams: mockSetQueryParams,
+      resetQueryParams: mockResetQueryParams,
+    })
+  })
+
+  it('renders key input groups', () => {
+    render(<QueryBuilder />)
+
+    expect(screen.getByPlaceholderText(/例如: AI, growth, iPhone/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Language/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Time Range/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Min Likes/i)).toBeInTheDocument()
+  })
+
+  it('adds required keyword when pressing Enter', () => {
+    render(<QueryBuilder />)
+
+    const input = screen.getByPlaceholderText(/例如: AI, growth, iPhone/i)
+    fireEvent.change(input, { target: { value: 'AI' } })
+    fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' })
+
+    expect(mockSetQueryParams).toHaveBeenCalledWith({
+      keywords: ['AI'],
+    })
+  })
+
+  it('changes language selection', () => {
+    render(<QueryBuilder />)
+
+    fireEvent.change(screen.getByLabelText(/Language/i), {
+      target: { value: 'zh' },
     })
 
-    it('renders all basic input fields', () => {
-        render(<QueryBuilder />)
-
-        expect(screen.getByPlaceholderText(/Add keywords/i)).toBeInTheDocument()
-        expect(screen.getByLabelText(/Language/i)).toBeInTheDocument()
-        expect(screen.getByLabelText(/Time Range/i)).toBeInTheDocument()
-        expect(screen.getByLabelText(/Min Likes/i)).toBeInTheDocument()
+    expect(mockSetQueryParams).toHaveBeenCalledWith({
+      language: 'zh',
     })
+  })
 
-    it('updates keywords when typing and pressing enter', () => {
-        render(<QueryBuilder />)
+  it('shows advanced section after toggle', () => {
+    render(<QueryBuilder />)
 
-        const input = screen.getByPlaceholderText(/Add keywords/i)
-        fireEvent.change(input, { target: { value: 'AI' } })
-        fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' })
+    fireEvent.click(screen.getByText(/展开高级操作符/i))
 
-        expect(mockSetQueryParams).toHaveBeenCalledWith({
-            keywords: ['AI'],
-        })
-    })
-
-    it('updates language when selection changes', () => {
-        render(<QueryBuilder />)
-
-        const select = screen.getByLabelText(/Language/i)
-        fireEvent.change(select, { target: { value: 'zh-cn' } })
-
-        expect(mockSetQueryParams).toHaveBeenCalledWith({
-            language: 'zh-cn',
-        })
-    })
-
-    it('toggles advanced filters', () => {
-        render(<QueryBuilder />)
-
-        const advancedButton = screen.getByText(/Advanced Filters/i)
-        fireEvent.click(advancedButton)
-
-        // Check for advanced options
-        expect(screen.getByLabelText(/Images/i)).toBeInTheDocument()
-        expect(screen.getByLabelText(/Videos/i)).toBeInTheDocument()
-        expect(screen.getByLabelText(/Retweets/i)).toBeInTheDocument()
-    })
+    expect(screen.getByText(/内容类型/i)).toBeInTheDocument()
+    expect(screen.getByText(/包含条件/i)).toBeInTheDocument()
+    expect(screen.getByText(/排除条件/i)).toBeInTheDocument()
+    expect(screen.getByPlaceholderText(/url:github/i)).toBeInTheDocument()
+  })
 })

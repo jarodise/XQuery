@@ -1,1 +1,0 @@
-chrome.action.onClicked.addListener(async e=>{var t;e.id&&((t=e.url)!=null&&t.match(/^https?:\/\/(twitter|x)\.com/))&&chrome.tabs.sendMessage(e.id,{type:"TOGGLE_SIDEBAR"})});chrome.runtime.onMessage.addListener((e,t,r)=>{var i;return e.type==="GET_TAB_ID"&&r({tabId:(i=t.tab)==null?void 0:i.id}),!0});
