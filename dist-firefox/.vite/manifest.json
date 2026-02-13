@@ -1,6 +1,6 @@
 {
   "../../@crx/manifest": {
-    "file": "assets/crx-manifest.js-C_LURMcy.js",
+    "file": "assets/crx-manifest.js-CR5Iokg1.js",
     "name": "crx-manifest.js",
     "src": "../../@crx/manifest",
     "isEntry": true
@@ -10,7 +10,7 @@
     "name": "extensionApi"
   },
   "index.tsx-loader.js": {
-    "file": "assets/index.tsx-loader-DimCqIwc.js",
+    "file": "assets/index.tsx-loader-B9bVlQaY.js",
     "src": "index.tsx-loader.js"
   },
   "src/background/index.ts": {
@@ -23,7 +23,7 @@
     ]
   },
   "src/content/index.tsx": {
-    "file": "assets/index.tsx-DMM_upXB.js",
+    "file": "assets/index.tsx-BtRxaokV.js",
     "name": "index.tsx",
     "src": "src/content/index.tsx",
     "isEntry": true,

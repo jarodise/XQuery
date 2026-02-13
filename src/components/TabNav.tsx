@@ -2,8 +2,8 @@ import { useStore } from '@/stores/useStore'
 import type { TabType } from '@/types'
 
 const tabs: { id: TabType; label: string }[] = [
-  { id: 'templates', label: '模板' },
-  { id: 'custom', label: '自定义' },
+  { id: 'templates', label: '超级模板' },
+  { id: 'custom', label: '超级构建' },
   { id: 'favorites', label: '收藏' },
 ]
 

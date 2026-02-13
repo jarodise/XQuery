@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:firefox": "tsc && vite build --mode firefox",
     "preview": "vite preview",
     "test": "vitest",
     "test:coverage": "vitest --coverage"

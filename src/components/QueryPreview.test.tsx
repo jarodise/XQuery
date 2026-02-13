@@ -37,7 +37,7 @@ describe('QueryPreview', () => {
 
     it('renders the generated query', () => {
         render(<QueryPreview />)
-        expect(screen.getByText('AI lang:en')).toBeInTheDocument()
+        expect(screen.getByDisplayValue('AI lang:en')).toBeInTheDocument()
     })
 
     it('calls executeSearch when Search button is clicked', () => {
@@ -57,5 +57,15 @@ describe('QueryPreview', () => {
         fireEvent.click(saveButton)
 
         expect(mockAddFavorite).toHaveBeenCalledWith('My Favorite AI', 'AI lang:en')
+    })
+
+    it('uses edited query when user modifies preview', () => {
+        render(<QueryPreview />)
+        const textarea = screen.getByLabelText(/Editable query preview/i)
+
+        fireEvent.change(textarea, { target: { value: 'custom edited query' } })
+        fireEvent.click(screen.getByRole('button', { name: /Search/i }))
+
+        expect(executeSearch).toHaveBeenCalledWith('custom edited query')
     })
 })

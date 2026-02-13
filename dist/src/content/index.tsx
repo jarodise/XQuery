@@ -1,6 +1,7 @@
 import { createRoot } from 'react-dom/client'
 import Sidebar from './Sidebar'
 import '../styles/sidebar.css'
+import { getExtensionApi } from '@/utils/extensionApi'
 
 // Sidebar container ID
 const SIDEBAR_ID = 'x-query-search-sidebar'
@@ -119,7 +120,8 @@ function toggleSidebar() {
 }
 
 // Listen for messages from background script
-chrome.runtime.onMessage.addListener((message) => {
+const extensionApi = getExtensionApi()
+extensionApi?.runtime.onMessage.addListener((message) => {
   if (message.type === 'TOGGLE_SIDEBAR') {
     toggleSidebar()
   }

@@ -1,0 +1,1 @@
+import{g as a}from"./extensionApi-C4IXQV95.js";const t=a();t==null||t.action.onClicked.addListener(async e=>{var d;e.id&&((d=e.url)!=null&&d.match(/^https?:\/\/(twitter|x)\.com/))&&t.tabs.sendMessage(e.id,{type:"TOGGLE_SIDEBAR"})});t==null||t.runtime.onMessage.addListener((e,d,s)=>{var r;return e.type==="GET_TAB_ID"&&s({tabId:(r=d.tab)==null?void 0:r.id}),!0});

@@ -1,3 +1,5 @@
+import { getExtensionApi } from './extensionApi'
+
 /**
  * Builds an X.com search URL from a query string
  */
@@ -19,9 +21,10 @@ export function executeSearch(query: string): void {
  */
 export function executeSearchInTab(query: string, tabId?: number): void {
   const url = buildSearchUrl(query)
+  const extensionApi = getExtensionApi()
 
-  if (tabId !== undefined && chrome?.tabs) {
-    chrome.tabs.update(tabId, { url })
+  if (tabId !== undefined && extensionApi?.tabs) {
+    extensionApi.tabs.update(tabId, { url })
   } else {
     window.open(url, '_blank')
   }
