@@ -1,6 +1,6 @@
 # X Query Search 🚀 (中文版)
 
-高级 X.com 搜索查询构建器和管理器。此浏览器扩展程序通过强大的搜索模板和自定义查询构建器，帮助您在 X.com 上发现高质量内容。
+高级 X.com 搜索查询构建器和管理器。此 Chrome 扩展程序通过强大的搜索模板和自定义查询构建器，帮助您在 X.com 上发现高质量内容。
 
 ![预览图](public/preview.png)
 
@@ -14,15 +14,11 @@
    - 开启右上角的 **开发者模式**。
    - 点击 **加载已解压的扩展程序 (Load unpacked)**。
    - 选择本仓库中的 **`dist`** 文件夹。
-3. **完成**: 此时扩展图标应出现在工具栏中，访问 [x.com](https://x.com) 即可使用！
-
-### Firefox 加载方式
-1. **构建 Firefox 版本**: `pnpm build:firefox`
-2. **在 Firefox 中加载**:
-   - 打开 Firefox，访问 `about:debugging#/runtime/this-firefox`
-   - 点击 **Load Temporary Add-on...**
-   - 选择本仓库中的 `dist-firefox/manifest.json`
-3. **完成**: 刷新 [x.com](https://x.com) 后点击扩展图标打开侧边栏。
+3. **在 Firefox 中加载**:
+    - 打开 Firefox，访问 `about:debugging#/runtime/this-firefox`。
+    - 点击 **Load Temporary Add-on...**。
+    - 选择本仓库中的 **`dist-firefox/manifest.json`** 文件。
+4. **完成**: 此时扩展图标应出现在工具栏中，访问 [x.com](https://x.com) 即可使用！
 
 ---
 
@@ -30,8 +26,11 @@
 
 - **🔍 搜索模板**: 针对不同地区（中文、英文、日文等）和话题的预设搜索模式。
 - **🛠️ 自定义查询构建器**: 使用关键词、语言、时间范围和最小点赞数轻松构建复杂查询。
+- **🏗️ 超级查询生成器**: 可视化构建复杂的布尔逻辑查询 (AND/OR/NOT)，支持拖拽调整。
+- **📝 可编辑预览**: 在跳转搜索前，可以直接编辑生成的查询语句。
 - **⚡ 高级设置**: 可选过滤媒体类型（图片/视频）和排除项（转推、回复、链接）。
 - **🔖 收藏夹管理器**: 保存您常用的搜索查询，点击即可快速触发。
+- **🦊 Firefox 支持**: 现已完全支持 Firefox 浏览器。
 - **🔗 深度 X 集成**: 直接跳转到 X.com 的实时搜索结果页面。
 - **💻 优质设计**: 采用简洁、原生的 Twitter/X 风格美学设计。
 
@@ -41,9 +40,10 @@
 
 1. **环境准备**: 确保已安装 Node.js 和 `pnpm`。
 2. **安装依赖**: `pnpm install`
-3. **构建 Chrome**: `pnpm build`
-4. **构建 Firefox**: `pnpm build:firefox`
-5. **开发模式**: `pnpm dev` (支持热重载)
+3. **构建项目**: 
+   - Chrome: `pnpm build`
+   - Firefox: `pnpm build:firefox`
+4. **开发模式**: `pnpm dev` (支持热重载)
 
 ## 许可证
 
@@ -53,7 +53,7 @@ MIT
 
 # X Query Search 🚀 (English)
 
-Advanced X.com search query builder and manager. This browser extension helps you find high-quality content on X.com using powerful search templates and a custom query builder.
+Advanced X.com search query builder and manager. This Chrome extension helps you find high-quality content on X.com using powerful search templates and a custom query builder.
 
 ![Extension Preview](public/preview.png)
 
@@ -67,34 +67,33 @@ If you don't want to build from source, you can use the pre-built version direct
    - Enable **Developer mode** in the top right.
    - Click **Load unpacked**.
    - Select the **`dist`** folder in this repository.
-3. **Done**: The extension is now active. Refresh [x.com](https://x.com) to start searching!
-
-### Firefox Install
-1. **Build Firefox output**: `pnpm build:firefox`
-2. **Load in Firefox**:
-   - Open Firefox and go to `about:debugging#/runtime/this-firefox`
-   - Click **Load Temporary Add-on...**
-   - Select `dist-firefox/manifest.json` from this repository.
-3. **Done**: Refresh [x.com](https://x.com), then click the extension icon.
+3. **Load in Firefox**:
+    - Open Firefox and go to `about:debugging#/runtime/this-firefox`.
+    - Click **Load Temporary Add-on...**.
+    - Select the **`dist-firefox/manifest.json`** file.
+4. **Done**: The extension is now active. Refresh [x.com](https://x.com) to start searching!
 
 ---
 
 ## Features
 
 - **🔍 Search Templates**: Predefined search patterns for different regions and topics.
-- **🛠️ Super Query Builder**: Build advanced queries with `min_faves`, `min_retweets`, `min_replies`, `from/to/@`, `since/until`, `near/within`, include/exclude filters, and custom operators.
+- **🛠️ Custom Query Builder**: Build complex queries using keywords, languages, and time ranges.
+- **🏗️ Super Query Builder**: Visually build complex boolean logic queries (AND/OR/NOT).
+- **📝 Editable Preview**: Edit the generated query directly before searching.
 - **⚡ Advanced Filters**: Toggle filters for media types and exclusions.
 - **🔖 Favorites Manager**: Save and trigger frequently used search queries.
+- **🦊 Firefox Support**: Fully compatible with Firefox browser.
 - **🔗 Deep X Integration**: Navigates directly to live search results on X.com.
-- **📚 Scenario Templates**: Category-based templates (quality, brand monitoring, growth, jobs, dev resources, market, local, media, research).
 
 ## 🛠️ Developer Guide (Build from Source)
 
 1. **Prerequisites**: Ensure you have Node.js and `pnpm` installed.
 2. **Install**: `pnpm install`
-3. **Build (Chrome)**: `pnpm build`
-4. **Build (Firefox)**: `pnpm build:firefox`
-5. **Development**: `pnpm dev`
+3. **Build**: 
+   - Chrome: `pnpm build`
+   - Firefox: `pnpm build:firefox`
+4. **Development**: `pnpm dev`
 
 ## License
 
