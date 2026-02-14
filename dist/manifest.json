@@ -31,7 +31,7 @@
   "content_scripts": [
     {
       "js": [
-        "assets/index.tsx-loader-DimCqIwc.js"
+        "assets/index.tsx-loader-CFFZqKsm.js"
       ],
       "matches": [
         "https://twitter.com/*",
@@ -51,7 +51,7 @@
       "resources": [
         "src/content/*",
         "assets/extensionApi-C4IXQV95.js",
-        "assets/index.tsx-DMM_upXB.js"
+        "assets/index.tsx-DFLaWnA0.js"
       ],
       "use_dynamic_url": false
     }
